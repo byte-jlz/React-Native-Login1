@@ -1,7 +1,13 @@
 import express from "express";
 import { Profiler } from "react";
+import jwt from "jsonwebtoken";
+
 
 const router = express.Router();
+
+const generateToken = (userId) => {
+    return jwt.sign({userId}, process.env.JWT_SECRET,{expiresIn: "15d"})
+}
 
 router.post("/register", async (req, res) =>{
     try {
@@ -44,9 +50,22 @@ router.post("/register", async (req, res) =>{
 
         await user.save();
 
+        const token = generateToken(user._id);
+        res.status(201).json({
+            token,
+            user:{
+                _id: user._id,
+                username: user.username,
+                email: user.email
+            }
+        })
+
 
     } catch (error) {
-        
+        console.log("Error in register route", error);
+        return res.status(500).json({ message: "Internal server Error!" })
+
+
     }
 
 })
