@@ -1,7 +1,6 @@
 import express from "express";
-import { Profiler } from "react";
 import jwt from "jsonwebtoken";
-
+import User from "../models/User.js";
 
 const router = express.Router();
 
@@ -13,7 +12,7 @@ router.post("/register", async (req, res) =>{
     try {
         const {username, email, password} = req.body;
 
-        if(username || !email || !password){
+        if(!username || !email || !password){
             return res.status(400).json({ message: "All fields are required" })
         }
 
@@ -27,13 +26,13 @@ router.post("/register", async (req, res) =>{
 
         }
 
-        const exisitingEmail = await User.findone({ email });
+        const exisitingEmail = await User.findOne({ email });
             if(exisitingEmail){
                 return res.status(400).json({ message: "Email address is already taken!" })
 
             }
 
-        const exisitingUsername = await User.findone({ username });
+        const exisitingUsername = await User.findOne({ username });
             if(exisitingUsername){
                 return res.status(400).json({ message: "Username is already taken!" })
 
