@@ -10,9 +10,9 @@ const generateToken = (userId) => {
 
 router.post("/register", async (req, res) =>{
     try {
-        const {username, email, password} = req.body;
+        const {name, email, password} = req.body;
 
-        if(!username || !email || !password){
+        if(!name || !email || !password){
             return res.status(400).json({ message: "All fields are required" })
         }
 
@@ -21,8 +21,8 @@ router.post("/register", async (req, res) =>{
 
         }
 
-        if(username.length < 6){
-            return res.status(400).json({ message: "Username should be at least 6 character long" })
+        if(name.length < 4){
+            return res.status(400).json({ message: "Please input your fullname2" })
 
         }
 
@@ -32,16 +32,11 @@ router.post("/register", async (req, res) =>{
 
             }
 
-        const exisitingUsername = await User.findOne({ username });
-            if(exisitingUsername){
-                return res.status(400).json({ message: "Username is already taken!" })
 
-            }
-
-        const profileImage = `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`;
+        const profileImage = `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`;
 
         const user = new User({
-            username,
+            name,
             email,
             password,
             profileImage,
@@ -54,7 +49,7 @@ router.post("/register", async (req, res) =>{
             token,
             user:{
                 _id: user._id,
-                username: user.username,
+                name: user.name,
                 email: user.email
             }
         });
@@ -86,7 +81,7 @@ router.post("/login", async (req, res) =>{
             token,
             user:{
                 _id: user._id,
-                username: user.username,
+                name: user.name,
                 email: user.email
             }
         })
