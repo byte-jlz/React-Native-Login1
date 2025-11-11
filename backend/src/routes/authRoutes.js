@@ -57,12 +57,12 @@ router.post("/register", async (req, res) =>{
                 username: user.username,
                 email: user.email
             }
-        })
+        });
 
 
     } catch (error) {
         console.log("Error in register route", error);
-        return res.status(500).json({ message: "Internal server Error!" })
+        return res.status(500).json({ message: "Internal server Error!" });
 
 
     }
@@ -70,7 +70,32 @@ router.post("/register", async (req, res) =>{
 })
 
 router.post("/login", async (req, res) =>{
-    res.send("/login");
+    try {
+        const {email, password} = req.body;
+
+        if (!email || !password) return res.status(400).json({ message: "All fields are required!"});
+
+        const user = await User.findOne({email});
+        if(!user) return res.status(400).json({ message: "Invalid Credentials!"});
+        
+        const isPasswordCorrect = await user.comparePassword(password);
+        if(!isPasswordCorrect) return res.status(400).json({ message: "Invalid Credentials!"});
+
+        const token = generateToken(user._id);
+        res.status(201).json({
+            token,
+            user:{
+                _id: user._id,
+                username: user.username,
+                email: user.email
+            }
+        })
+
+    } catch (error) {
+        console.log("Error in login route", error);
+        return res.status(500).json({ message: "Internal server Error!" });
+
+    }
 })
 
 export default router;
