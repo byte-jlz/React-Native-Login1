@@ -28,6 +28,8 @@ const animalSchema = new mongoose.Schema({
         require: true
     }
 
-})
+}, {timestamps:true})
 
-export default mongoose.model('Animal', animalSchema)
+const Animal = mongoose.model("Animal", animalSchema)
+
+export default Animal;
