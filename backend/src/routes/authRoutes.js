@@ -22,7 +22,7 @@ router.post("/register", async (req, res) =>{
         }
 
         if(name.length < 4){
-            return res.status(400).json({ message: "Please input your fullname2" })
+            return res.status(400).json({ message: "Name should be at least 4 characters long" })
 
         }
 
@@ -48,7 +48,7 @@ router.post("/register", async (req, res) =>{
         res.status(201).json({
             token,
             user:{
-                id: user._id,
+                _id: user._id,
                 name: user.name,
                 email: user.email
             }
@@ -73,7 +73,7 @@ router.post("/login", async (req, res) =>{
         const user = await User.findOne({email});
         if(!user) return res.status(400).json({ message: "Invalid Credentials!"});
         
-        const isPasswordCorrect = await User.comparePassword(password);
+        const isPasswordCorrect = await user.comparePassword(password);
         if(!isPasswordCorrect) return res.status(400).json({ message: "Invalid Credentials!"});
 
         const token = generateToken(user._id);
