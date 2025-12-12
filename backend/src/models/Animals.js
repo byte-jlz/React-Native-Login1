@@ -1,5 +1,5 @@
 import mongoose, { mongo, Mongoose } from "mongoose";
-import User from "./User";
+import User from "../models/User.js";
 
 const animalSchema = new mongoose.Schema({
     petName:{
@@ -22,11 +22,12 @@ const animalSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    user:{
-        tyep: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        require: true
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User", // <--- FIX: Use the string name "User", not the imported variable
+        required: true
     }
+
 
 }, {timestamps:true})
 

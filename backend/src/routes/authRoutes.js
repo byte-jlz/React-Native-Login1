@@ -48,7 +48,7 @@ router.post("/register", async (req, res) =>{
         res.status(201).json({
             token,
             user:{
-                _id: user._id,
+                id: user._id,
                 name: user.name,
                 email: user.email
             }
@@ -73,7 +73,7 @@ router.post("/login", async (req, res) =>{
         const user = await User.findOne({email});
         if(!user) return res.status(400).json({ message: "Invalid Credentials!"});
         
-        const isPasswordCorrect = await user.comparePassword(password);
+        const isPasswordCorrect = await User.comparePassword(password);
         if(!isPasswordCorrect) return res.status(400).json({ message: "Invalid Credentials!"});
 
         const token = generateToken(user._id);
