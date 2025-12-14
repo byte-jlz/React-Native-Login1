@@ -2,23 +2,26 @@ import mongoose, { mongo, Mongoose } from "mongoose";
 import User from "../models/User.js";
 
 const animalSchema = new mongoose.Schema({
-    petName:{
+    petName: {
         type: String,
         require: true
     },
-    petBreed:{
+    petBreed: {
         type: String,
         require: true
     },
-    petAge:{
+    petAge: {
         type: Number,
         require: true
     },
-    petBday:{
+    petBday: {
         type: Date,
         require: true
     },
-    petImg:{
+    petGender: { 
+        type: String, enum: ['male', 'female'] 
+    },
+    petImg: {
         type: String,
         default: ""
     },
@@ -29,7 +32,7 @@ const animalSchema = new mongoose.Schema({
     }
 
 
-}, {timestamps:true})
+}, { timestamps: true })
 
 const Animal = mongoose.model("Animal", animalSchema)
 
